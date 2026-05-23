@@ -20,7 +20,7 @@ class RecipeViewModel : ViewModel() {
         getRecipes()
     }
 
-    fun getRecipes() {
+    fun getRecipes(forceRefresh: Boolean = false) {
 
         viewModelScope.launch {
 

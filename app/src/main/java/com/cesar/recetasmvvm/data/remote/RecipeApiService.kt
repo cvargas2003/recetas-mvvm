@@ -27,4 +27,8 @@ interface RecipeApiService {
     suspend fun addReview(
         @Body review: Review
     )
+    @POST("recipes")
+    suspend fun addRecipe(
+        @Body recipe: Recipe
+    )
 }

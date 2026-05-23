@@ -1,5 +1,4 @@
 package com.cesar.recetasmvvm.data.repository
-
 import com.cesar.recetasmvvm.data.remote.RetrofitClient
 import com.cesar.recetasmvvm.domain.model.Recipe
 import com.cesar.recetasmvvm.domain.model.RecipeStats
@@ -18,11 +17,23 @@ class RecipeRepositoryImpl : RecipeRepository {
         return api.getRecipeById(id)
     }
 
-    override suspend fun getRecipeStats(id: Int): RecipeStats {
-        return api.getRecipeStats(id)
-    }
-
     override suspend fun addReview(review: Review) {
         api.addReview(review)
+    }
+
+    override suspend fun getRecipeStats(
+        id: Int
+    ): RecipeStats {
+
+        return RetrofitClient.api
+            .getRecipeStats(id)
+    }
+    override suspend fun addRecipe(
+        recipe: Recipe
+    ) {
+
+        RetrofitClient
+            .api
+            .addRecipe(recipe)
     }
 }

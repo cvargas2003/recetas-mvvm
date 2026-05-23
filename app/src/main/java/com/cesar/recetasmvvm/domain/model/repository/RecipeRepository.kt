@@ -10,7 +10,14 @@ interface RecipeRepository {
 
     suspend fun getRecipeById(id: Int): Recipe
 
-    suspend fun getRecipeStats(id: Int): RecipeStats
 
     suspend fun addReview(review: Review)
+
+    suspend fun getRecipeStats(
+        id: Int
+    ): RecipeStats
+
+    suspend fun addRecipe(
+        recipe: Recipe
+    )
 }

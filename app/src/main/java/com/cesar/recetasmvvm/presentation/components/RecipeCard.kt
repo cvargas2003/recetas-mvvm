@@ -10,16 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cesar.recetasmvvm.domain.model.Recipe
+import androidx.compose.foundation.clickable
 
 @Composable
 fun RecipeCard(
-    recipe: Recipe
+    recipe: Recipe,
+    onClick: () -> Unit
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .clickable {
+                onClick()
+            },
 
         shape = RoundedCornerShape(16.dp),
 

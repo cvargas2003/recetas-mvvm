@@ -3,9 +3,9 @@ package com.cesar.recetasmvvm.presentation.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,58 +13,100 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.cesar.recetasmvvm.presentation.components.RecipeCard
 import com.cesar.recetasmvvm.presentation.viewmodel.RecipeViewModel
+import androidx.compose.runtime.LaunchedEffect
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: RecipeViewModel = viewModel()
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(Unit) {
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+        viewModel.getRecipes()
+    }
+    Scaffold(
 
-        when {
+        floatingActionButton = {
 
-            uiState.isLoading -> {
+            FloatingActionButton(
 
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                onClick = {
+
+                    navController.navigate(
+                        "add_recipe"
+                    )
+                }
+            ) {
+
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add"
                 )
             }
+        }
 
-            uiState.error != null -> {
+    ) { paddingValues ->
 
-                Text(
-                    text = uiState.error ?: "Unknown error",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
 
-            else -> {
+            when {
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                ) {
+                uiState.isLoading -> {
 
-                    item {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
-                        Text(
-                            text = "Chef Recipes",
-                            style = MaterialTheme.typography.headlineMedium
-                        )
+                uiState.error != null -> {
 
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
+                    Text(
+                        text = uiState.error ?: "Unknown error",
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
 
-                    items(uiState.recipes) { recipe ->
+                else -> {
 
-                        RecipeCard(recipe = recipe)
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+
+                        item {
+
+                            Text(
+                                text = "Chef Recipes",
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+
+                        items(uiState.recipes) { recipe ->
+
+                            RecipeCard(
+
+                                recipe = recipe,
+
+                                onClick = {
+
+                                    navController.navigate(
+                                        "detail/${recipe.id}"
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }
